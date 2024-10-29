@@ -79,9 +79,6 @@ datos <- read.csv(file = "LA MOLINA 2014 POTATO WUE (FB) - fb.csv", header = TRU
 view(datos)
 ```
 
-
-
-
 ## Modelo lineal lfa
 
 ```{r}
@@ -160,12 +157,9 @@ model <- remove_outliers(data = datos
 model
 ```
 
+## Comparacion de medias con Tukey con Agricolae
 
-
-## Comparacion de medias con Tukey con Agricolae 
 ### Comparacion de medias de tukey (riego )
-
-
 
 ```{r}
 library(agricolae)
@@ -176,6 +170,7 @@ plot(tukey_riego)
 ```
 
 ### Comparacion de medias con tukey (geno )
+
 ```{r}
 tukey_geno <- HSD.test(modelo, "geno", group = TRUE)
 print(tukey_geno)
@@ -183,6 +178,7 @@ plot(tukey_geno)
 ```
 
 ### Comparacion de medias de tukey (Interraccion riego y geno)
+
 ```{r}
 tukey_interaccion <- HSD.test(modelo, c("riego","geno"), group = TRUE)
 
@@ -204,8 +200,8 @@ grupos <- tukey_interaccion$groups %>%
 str(grupos)
 ```
 
-
 ### Boxplot
+
 ```{r}
 library(ggplot2)
 
@@ -217,7 +213,8 @@ ggplot(grupos, aes(x = geno, y = lfa , fill = riego)) +
   ggtitle("Gráfico de barras: LFA por genotipo y riego")
 ```
 
-### Letras dentro de la grafica 
+### Letras dentro de la grafica
+
 ```{r}
 ggplot(grupos, aes(x = geno, y = lfa, fill = riego)) +
   geom_bar(stat = "identity", position = position_dodge()) +
@@ -233,9 +230,10 @@ ggplot(grupos, aes(x = geno, y = lfa, fill = riego)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+# Comparacion de medias con: emmeans
 
-# Comparacion de medias con: emmeans 
 ## Modelo mixto de hi
+
 ```{r}
 source('https://inkaverse.com/setup.r')
 library(emmeans)
@@ -259,7 +257,7 @@ cm3 <- emmeans(modelo , ~  riego * geno)%>%
 cm3
 ```
 
-### Grafica 
+### Grafica
 
 ```{r}
 library(ggplot2)
@@ -279,8 +277,8 @@ ggplot(dtcm, aes(x = geno, y = emmean, fill = riego)) +
   ggtitle("Gráfico de barras: HI por genotipo y riego")
 ```
 
-
 ###Grafica 2
+
 ```{r}
 library(ggplot2)
 library(emmeans)
@@ -300,10 +298,9 @@ ggplot(cm1_df, aes(x = geno, y = emmean, color = riego, group = riego)) +
 
 ```
 
+# Analisis multivariado
 
-# Analisis multivariado 
-
-## Corelacion 
+## Corelacion
 
 ```{r}
 variables_cuantitativas <- datos[, c("lfa", "hi", "leafdw", "wue")]
@@ -318,7 +315,6 @@ corrplot(matriz_correlacion, method = "circle", type = "upper",
          tl.col = "black", tl.srt = 45, 
          title = "Matriz de Correlación", mar = c(0, 0, 1, 0))
 ```
-
 
 ```{r}
 library(PerformanceAnalytics)
@@ -343,8 +339,8 @@ pairs.panels(x = .
       )
 ```
 
+## Analisis de PCA
 
-## Analisis  de PCA 
 ```{r}
 variables_cuantitativas <- datos[sapply(datos, is.numeric)]
 
@@ -361,8 +357,8 @@ autoplot(pca_result, data = datos, colour = 'black', loadings = TRUE, loadings.l
 
 ```
 
-
 ### PCA DOS EN UNO
+
 ```{r}
 library(FactoMineR)
 library(cowplot)
@@ -382,36 +378,3 @@ p2 <- plot(mv,
 list(p1, p2) %>%
   plot_grid(plotlist = ., nrow = 1)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
